@@ -1,0 +1,39 @@
+{
+  "name": "create-snackabra",
+  "version": "1.0.0",
+  "description": "Installer for snackabra.io",
+  "main": "tasks/install.js",
+  "workspaces": [
+    "packages/*"
+  ],
+  "bin": {
+    "create-snackabra": "./tasks/install.js"
+  },
+  "scripts": {
+    "build": "cd scripts/snackabra-install && node bin/react-scripts.js build",
+    "create-snackabra": "./tasks/install.js",
+    "down": "./tasks/down.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/snackabra/create-snackabra.git"
+  },
+  "keywords": [
+    "snackabra"
+  ],
+  "author": "Magnusson Institute",
+  "email": "snackabra@gmail.com",
+  "license": "GPL-3.0-only",
+  "bugs": {
+    "url": "https://github.com/snackabra/create-snackabra/issues"
+  },
+  "engines": {
+    "node": ">=15"
+  },
+  "homepage": "https://github.com/snackabra/create-snackabra#readme",
+  "dependencies": {
+    "md5": "^2.3.0",
+    "yargs": "^17.5.1"
+  }
+}
