@@ -32,7 +32,16 @@ yarn global add @cloudflare/wrangler
 ## Usage
 
 ```
-npx create-snackabra --dir=snackabra --cf=YOUR_CLOUDFLARE_ACCOUNT_ID
+git clone https://github.com/snackabra/create-snackabra.git
+```
+```angular2html
+cd ./create-snackabra
+npm install
+cd ..
+```
+
+```
+npx ./create-snackabra --dir=snackabra --cf=YOUR_CLOUDFLARE_ACCOUNT_ID
 ```
 
 
