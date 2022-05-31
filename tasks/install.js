@@ -4,7 +4,7 @@ const args = require('yargs').argv;
 const path = require('path');
 const cp = require('child_process');
 const {execSync} = require("child_process");
-const fs = require("fs");
+const fs = require("fs-extra");
 
 const rootDir = path.join(__dirname, '..');
 
@@ -98,7 +98,7 @@ const storageServerCleanUp = () => {
      */
 }
 
-const webclientCleanUp  = () =>{
+const webclientCleanUp = () => {
 
 }
 
@@ -111,9 +111,13 @@ const handleExit = () => {
 const handleError = e => {
     console.error('ERROR! An error was encountered while executing');
     console.error(e);
+    process.exit(1);
+    /*
     cleanupError();
     console.log('Exiting with error.');
     process.exit(1);
+
+     */
 };
 
 process.on('SIGINT', handleExit);
@@ -140,6 +144,36 @@ if (!args.dir) {
 
 const sbiScriptPath = path.join(scriptsPath, 'index.js');
 
+// Add Package.json to project root
+const packageJSON = {
+    "name": args.dir,
+    "version": "1.0.0",
+    "description": "snackabra.io",
+    "scripts": {
+        "down": "./down.js",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/snackabra/create-snackabra.git"
+    },
+    "keywords": [
+        "snackabra"
+    ],
+    "engines": {
+        "node": ">=15"
+    },
+    "homepage": "https://github.com/snackabra/create-snackabra#readme",
+    "dependencies": {}
+}
+
+fs.mkdirSync(path.join(execDir, args.dir), {recursive: true});
+
+fs.writeJsonSync(path.join(execDir, args.dir, 'package.json'), packageJSON);
+
+// Copy Tear Down
+fs.copyFileSync(path.join(rootDir, 'tasks', 'down.js'), path.join(execDir, args.dir, 'down.js'));
+
 // Setup Wrangler
 cp.execSync(
     'echo "y" | wrangler login',
@@ -149,7 +183,7 @@ cp.execSync(
     }
 );
 
-//Install
+// Install
 cp.execSync(
     `node ${sbiScriptPath} ${args.dir} ${args.cf} ${execDir} --scripts-version="${scriptsPath}"`,
     {

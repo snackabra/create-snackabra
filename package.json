@@ -33,6 +33,7 @@
   },
   "homepage": "https://github.com/snackabra/create-snackabra#readme",
   "dependencies": {
+    "fs-extra": "^10.1.0",
     "md5": "^2.3.0",
     "yargs": "^17.5.1"
   }

@@ -1,19 +1,16 @@
 #!/usr/bin/env node
 'use strict';
-const args = require('yargs').argv;
 const path = require('path');
 const cp = require('child_process');
-const {execSync} = require("child_process");
 const fs = require("fs");
 
-const rootDir = path.join(__dirname, '..');
-console.log(rootDir,  args.dir)
+const rootDir = path.join(__dirname);
 const cleanUp = () => {
     channelServerCleanUp();
     storageServerCleanUp();
     webclientCleanUp();
     cp.execSync(
-        'rm -rf ' + args.dir,
+        'rm -rf ' + rootDir,
         {
             cwd: rootDir,
             stdio: 'inherit',
@@ -22,33 +19,33 @@ const cleanUp = () => {
 
 const channelServerCleanUp = () => {
     console.log('Cleaning up.');
-    console.log(`${path.join(rootDir, args.dir, 'servers', 'channel-server', 'wrangler.toml')}`)
-    const wrangler = fs.readFileSync(`${path.join(rootDir, args.dir, 'servers', 'channel-server', 'wrangler.toml')}`).toString();
+    console.log(`${path.join(rootDir, 'servers', 'channel-server', 'wrangler.toml')}`)
+    const wrangler = fs.readFileSync(`${path.join(rootDir, 'servers', 'channel-server', 'wrangler.toml')}`).toString();
     let out = wrangler.split('\n')
-    out = out.splice(0, out.length - 3)
-    fs.writeFileSync(`${path.join(rootDir, args.dir, 'servers', 'channel-server', 'wrangler.toml')}`, out.join('\n'))
+    out = out.splice(0, out.length - 4)
+    fs.writeFileSync(`${path.join(rootDir, 'servers', 'channel-server', 'wrangler.toml')}`, out.join('\n'))
     cp.execSync(
         `wrangler publish --delete-class ChatRoomAPI`,
         {
-            cwd: path.join(args.dir, 'servers', 'channel-server'),
+            cwd: path.join(rootDir, 'servers', 'channel-server'),
             stdio: 'inherit',
         })
     cp.execSync(
         `echo "y" | wrangler kv:namespace delete --binding MESSAGES_NAMESPACE`,
         {
-            cwd: `${args.dir}/servers/channel-server`,
+            cwd: path.join(rootDir, 'servers', 'channel-server'),
             stdio: 'inherit',
         })
     cp.execSync(
         `echo "y" | wrangler kv:namespace delete --binding KEYS_NAMESPACE`,
         {
-            cwd: `${args.dir}/servers/channel-server`,
+            cwd: path.join(rootDir, 'servers', 'channel-server'),
             stdio: 'inherit',
         })
     cp.execSync(
         `echo "y" | wrangler kv:namespace delete --binding LEDGER_NAMESPACE`,
         {
-            cwd: path.join(args.dir, 'servers', 'channel-server'),
+            cwd: path.join(rootDir, 'servers', 'channel-server'),
             stdio: 'inherit',
         })
 }
@@ -59,31 +56,27 @@ const storageServerCleanUp = () => {
     cp.execSync(
         `echo "y" | wrangler kv:namespace delete --binding RECOVERY_NAMESPACE`,
         {
-            cwd: `${args.dir}/servers/storage-server`,
+            cwd: path.join(rootDir, 'servers', 'storage-server'),
             stdio: 'inherit',
         })
     cp.execSync(
         `echo "y" | wrangler kv:namespace delete --binding IMAGES_NAMESPACE`,
         {
-            cwd: `${args.dir}/servers/storage-server`,
+            cwd: path.join(rootDir, 'servers', 'storage-server'),
             stdio: 'inherit',
         })
     cp.execSync(
         `echo "y" | wrangler kv:namespace delete --binding KEYS_NAMESPACE`,
         {
-            cwd: `${args.dir}/servers/storage-server`,
+            cwd: path.join(rootDir, 'servers', 'storage-server'),
             stdio: 'inherit',
         })
     cp.execSync(
         `echo "y" | wrangler kv:namespace delete --binding LEDGER_NAMESPACE`,
         {
-            cwd: path.join(args.dir, 'servers', 'storage-server'),
+            cwd: path.join(rootDir, 'servers', 'storage-server'),
             stdio: 'inherit',
         })
-    const wrangler = fs.readFileSync(`${path.join(rootDir, args.dir, 'servers', 'storage-server', 'wrangler.toml')}`).toString();
-    let out = wrangler.split('\n')
-    out = out.splice(0, out.length - 4)
-    fs.writeFileSync(`${path.join(rootDir, args.dir, 'servers', 'storage-server', 'wrangler.toml')}`, out.join('\n'))
 
 }
 
