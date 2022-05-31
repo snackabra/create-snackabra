@@ -39,20 +39,22 @@ function init(projectName, accountId, workingDir) {
         execSync(`git clone ${repo} ${projectRoot}`)
         const subdomain = execSync(
             `wrangler subdomain`, {
-                cwd: `${root}/servers/channel-server`
+                cwd: path.join(root, name, 'servers', 'channel-server')
             }).toString().match(/\s(.+)\.workers\.dev/)[1];
         process.chdir(projectRoot);
         const env = `REACT_APP_ROOM_SERVER=r.${subdomain.trim()}.worker.dev\n` +
             `REACT_APP_STORAGE_SERVER=s.${subdomain.trim()}.worker.dev\n`
         fs.writeFileSync(path.join(`${projectRoot}`, '.env'), env)
-        execSync(`npm install`,
+        execSync(`npm install --force`,
             {
                 cwd: projectRoot,
+                stdio: 'inherit',
             }
         )
         execSync(`npm run build`,
             {
                 cwd: projectRoot,
+                stdio: 'inherit',
             })
         process.chdir(root);
     }

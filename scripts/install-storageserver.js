@@ -58,7 +58,7 @@ function init(projectName, accountId, workingDir) {
         }
 
         publish(projectRoot);
-        const SERVER_SECRET = fs.readFileSync(path.join(root, 'servers', 'SERVER_SECRET.txt')).toString();
+        const SERVER_SECRET = fs.readFileSync(path.join(projectRoot, '..', 'channel-server', 'SERVER_SECRET.txt')).toString();
         setEnvVariable('SERVER_SECRET', SERVER_SECRET, projectRoot)
         process.chdir(root);
 
