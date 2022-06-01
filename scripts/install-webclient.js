@@ -42,8 +42,8 @@ function init(projectName, accountId, workingDir) {
                 cwd: path.join(root, name, 'servers', 'channel-server')
             }).toString().match(/\s(.+)\.workers\.dev/)[1];
         process.chdir(projectRoot);
-        const env = `REACT_APP_ROOM_SERVER=r.${subdomain.trim()}.worker.dev\n` +
-            `REACT_APP_STORAGE_SERVER=s.${subdomain.trim()}.worker.dev\n`
+        const env = `REACT_APP_ROOM_SERVER=r.${subdomain.trim()}.workers.dev\n` +
+            `REACT_APP_STORAGE_SERVER=s.${subdomain.trim()}.workers.dev\n`
         fs.writeFileSync(path.join(`${projectRoot}`, '.env'), env)
         execSync(`npm install --force`,
             {
